@@ -1,10 +1,5 @@
-const express = require('express');
+const app = require('../server');
 const AppController = require('../controllers/AppController');
 
-const exp = express();
-
-
-exp.get('/status', AppController.getStatus);
-exp.get('/stats', AppController.getStats);
-
-module.exports = exp;
+app.get('/status', AppController.getStatus);
+app.get('/stats', AppController.getStats);
