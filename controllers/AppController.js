@@ -7,7 +7,10 @@ class AppController {
   }
 
   static async getStats(request, response) {
-    return response.status(200).send({ users: await dbClient.nbUsers(), files: await dbClient.nbFiles() });
+    return response.status(200).send({
+      users: await dbClient.nbUsers(),
+      files: await dbClient.nbFiles(),
+    });
   }
 }
 
