@@ -14,10 +14,10 @@ class UsersController {
     const shasum = crypto.createHash('sha1');
     shasum.update(password);
     const pass = shasum.digest('hex');
-  	let _id;
-  	await dbClient.db.collection('users').insertOne({ email, password: pass }, (err, res) => {
-  		_id = res.insertedId;
-  	});
+    let _id;
+    await dbClient.db.collection('users').insertOne({ email, password: pass }, (err, res) => {
+      _id = res.insertedId;
+    });
 
     return response.status(201).send({ id: _id, email });
   }
