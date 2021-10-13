@@ -12,15 +12,12 @@ class UsersController {
     if (result && result.email === email) {
       return response.status(400).send({ error: 'Already exist' });
     }
-    let _id;
-    await dbClient.db.collection('users').insertOne({
+    const res = await dbClient.db.collection('users').insertOne({
       email,
       password: sha1(password),
-    }, (err, res) => {
-      _id = res.insertedId;
     });
 
-    return response.status(201).send({ id: _id, email });
+    return response.status(201).send({ id: res.insertedId, email });
   }
 }
 
