@@ -1,5 +1,9 @@
-const app = require('../server');
+const express = require('express');
 const AppController = require('../controllers/AppController');
 
-app.get('/status', AppController.getStatus);
-app.get('/stats', AppController.getStats);
+const router = express();
+
+router.get('/status', AppController.getStatus);
+router.get('/stats', AppController.getStats);
+
+module.exports = router;
