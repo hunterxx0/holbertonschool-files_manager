@@ -9,7 +9,7 @@ class UsersController {
     if (!password) return response.status(400).send({ error: 'Missing password' });
     if (!dbClient.db) return response.status(400).send({ error: 'Already exist' });
     const result = await dbClient.db.collection('users').findOne({ email });
-    if (result && result.email === email) {
+    if (result) {
       return response.status(400).send({ error: 'Already exist' });
     }
     const res = await dbClient.db.collection('users').insertOne({
