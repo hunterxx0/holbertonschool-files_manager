@@ -6,8 +6,8 @@ class AppController {
     return response.status(200).send({ redis: redisClient.isAlive(), db: dbClient.isAlive() });
   }
 
-  static getStats(request, response) {
-    return response.status(200).send({ users: dbClient.nbUsers(), files: dbClient.nbFiles() });
+  static async getStats(request, response) {
+    return response.status(200).send({ users: await dbClient.nbUsers(), files: await dbClient.nbFiles() });
   }
 }
 
