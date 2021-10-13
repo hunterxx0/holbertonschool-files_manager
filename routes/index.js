@@ -3,6 +3,7 @@ const AppController = require('../controllers/AppController');
 const UsersController = require('../controllers/UsersController');
 
 const router = express();
+router.use(express.json());
 
 router.get('/status', AppController.getStatus);
 router.get('/stats', AppController.getStats);
