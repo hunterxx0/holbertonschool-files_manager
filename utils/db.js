@@ -1,4 +1,5 @@
 const { MongoClient } = require('mongodb');
+
 class DBClient {
   constructor(host = 'localhost', port = 27017, database = 'files_manager') {
     MongoClient.connect(`mongodb://${host}:${port}`, { useUnifiedTopology: true, authSource: 'admin' }, (err, client) => {
