@@ -11,7 +11,6 @@ class DBClient {
       { useUnifiedTopology: true, authSource: 'admin' },
       (err, client) => {
         if (err) throw err;
-        this.connect = client.isConnected();
         this.db = client.db(database);
       }
     );
