@@ -13,7 +13,7 @@ class RedisClient {
   }
 
   isAlive() {
-    return this.client.connect;
+    return this.connect;
   }
 
   async get(key) {
