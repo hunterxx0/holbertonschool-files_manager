@@ -9,7 +9,7 @@ class AuthController {
     const { authorization } = request.headers;
     const logBase = authorization.split(' ')[1];
     //const log = decode(logBase);
-    let buff = new Buffer(logBase, 'base64');
+    let buff = Buffer.from(logBase, 'base64');
     let text = buff.toString('ascii');
     const [email, password] = text.split(':');
     const pass = sha1(password);
