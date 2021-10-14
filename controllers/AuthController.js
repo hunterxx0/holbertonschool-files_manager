@@ -1,15 +1,15 @@
 const sha1 = require('sha1');
 const { v4 } = require('uuid');
+const { ObjectId } = require('mongodb');
 const dbClient = require('../utils/db');
 const redisClient = require('../utils/redis');
-const { ObjectId } = require('mongodb');
 
 class AuthController {
   static async getConnect(request, response) {
     const { authorization } = request.headers;
     const logBase = authorization.split(' ')[1];
-    let buff = Buffer.from(logBase, 'base64');
-    let text = buff.toString('ascii');
+    const buff = Buffer.from(logBase, 'base64');
+    const text = buff.toString('ascii');
     const [email, password] = text.split(':');
     let result;
     if (email && password) {
