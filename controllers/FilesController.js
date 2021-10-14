@@ -1,3 +1,6 @@
+/* eslint-disable object-curly-newline */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-undef */
 /* eslint-disable comma-dangle */
 const { ObjectId } = require('mongodb');
 const { v4 } = require('uuid');
@@ -13,14 +16,8 @@ class FilesController {
       .collection('users')
       .findOne({ _id: ObjectId(id) });
     if (!result) return response.status(401).send({ error: 'Unauthorized' });
-
-    const {
-      name,
-      type,
-      parentId = null,
-      isPublic = false,
-      data,
-    } = request.body;
+    const { name, type, isPublic = false, data } = request.body;
+    let { parentId = null } = request.body;
     const allowedTypes = ['folder', 'image', 'file'];
     if (!name) return response.status(400).send({ error: 'Missing name' });
     if (!type || !allowedTypes.includes(type)) {
@@ -48,13 +45,14 @@ class FilesController {
     //   }
     // );
 
+    parentId = 0;
     if (type === 'folder') {
       const newFile = await dbClient.db.collection('files').insertOne({
         userId: id,
         name,
         type,
         isPublic,
-        parentId: parentId || 0,
+        parentId,
       });
 
       return response.status(201).send({
@@ -83,7 +81,7 @@ class FilesController {
       name,
       type,
       isPublic,
-      parentId: parentId || 0,
+      parentId,
       localPath,
     });
     return response.status(201).send({
@@ -96,5 +94,25 @@ class FilesController {
       localPath,
     });
   }
+
+  static async getShow(request, response) {
+    const { 'x-token': xToken } = request.headers;
+    const userId = await redisClient.get(`auth_${xToken}`);
+    const result = await dbClient.db
+      .collection('users')
+      .findOne({ _id: ObjectId(userId) });
+    if (!result) return response.status(401).send({ error: 'Unauthorized' });
+    const { id } = request.params;
+    const file = await dbClient.db
+      .collection('files')
+      .findOne({ _id: ObjectId(id), userId });
+    if (!file) return response.status(404).send({ error: 'Not found' });
+
+    return response.status(201).send({
+      ...file,
+    });
+  }
+
+  //   static async getIndex(request, response) {}
 }
 module.exports = FilesController;
