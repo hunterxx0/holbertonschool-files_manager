@@ -5,7 +5,6 @@ const { MongoClient } = require('mongodb');
 //   'mongodb+srv://m001-student:m001-mongodb-basics@sandbox.w9kej.mongodb.net';
 // `mongodb://${host}:${port}`
 class DBClient {
-  // eslint-disable-next-line no-unused-vars
   constructor(host = 'localhost', port = 27017, database = 'files_manager') {
     MongoClient.connect(
       `mongodb://${host}:${port}`,
