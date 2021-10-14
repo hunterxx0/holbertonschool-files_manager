@@ -6,21 +6,20 @@ const { MongoClient } = require('mongodb');
 // `mongodb://${host}:${port}`
 class DBClient {
   constructor(host = 'localhost', port = 27017, database = 'files_manager') {
-    (async () => {
-      this.client = await MongoClient.connect(
-        `mongodb://${host}:${port}`,
-        { useUnifiedTopology: true, authSource: 'admin' },
-        (err, client) => {
-          if (err) throw err;
-          this.connect = client.isConnected();
-          this.db = client.db(database);
-        }
-      );
-    })();
+    MongoClient.connect(
+      `mongodb://${host}:${port}`,
+      { useUnifiedTopology: true, authSource: 'admin' },
+      (err, client) => {
+        if (err) throw err;
+        this.connect = client.isConnected();
+        this.db = client.db(database);
+      }
+    );
   }
 
   isAlive() {
-    return this.client.isConnected();
+    if (this.db) return true;
+    return false;
   }
 
   async nbUsers() {
