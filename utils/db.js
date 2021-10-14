@@ -5,7 +5,7 @@ class DBClient {
   constructor(host = 'localhost', port = 27017, database = 'files_manager') {
     MongoClient.connect(
       `mongodb://${host}:${port}`,
-      { useUnifiedTopology: true, authSource: 'admin' },
+      { useUnifiedTopology: true },
       (err, client) => {
         if (err) throw err;
         this.db = client.db(database);
