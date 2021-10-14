@@ -1,6 +1,4 @@
 const sha1 = require('sha1');
-import decode from 'decode-base64';
-import { report } from 'superagent';
 const { v4 } = require('uuid');
 const dbClient = require('../utils/db');
 const redisClient = require('../utils/redis');
@@ -10,7 +8,6 @@ class AuthController {
   static async getConnect(request, response) {
     const { authorization } = request.headers;
     const logBase = authorization.split(' ')[1];
-    //const log = decode(logBase);
     let buff = Buffer.from(logBase, 'base64');
     let text = buff.toString('ascii');
     const [email, password] = text.split(':');
