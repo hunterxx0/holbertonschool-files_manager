@@ -1,9 +1,6 @@
 /* eslint-disable comma-dangle */
 const { MongoClient } = require('mongodb');
 
-// const url =
-//   'mongodb+srv://m001-student:m001-mongodb-basics@sandbox.w9kej.mongodb.net';
-// `mongodb://${host}:${port}`
 class DBClient {
   constructor(host = 'localhost', port = 27017, database = 'files_manager') {
     MongoClient.connect(
@@ -11,7 +8,6 @@ class DBClient {
       { useUnifiedTopology: true, authSource: 'admin' },
       (err, client) => {
         if (err) throw err;
-        this.connect = client.isConnected();
         this.db = client.db(database);
       }
     );

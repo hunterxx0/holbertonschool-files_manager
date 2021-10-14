@@ -1,6 +1,6 @@
 const sha1 = require('sha1');
 import decode from 'decode-base64';
-const { uuid } = require('uuidv4');
+const { v4 } = require('uuid');
 const dbClient = require('../utils/db');
 const redisClient = require('../utils/redis');
 
@@ -17,9 +17,9 @@ class AuthController {
       .collection('users')
       .findOne({ email, password: pass });
     if (!result) return response.status(401).send({ error: 'Unauthorized' });
-    const token = uuid();
+    const token = v4();
     const key = `auth_${token}`;
-    await redisClient.set(key, result.insertedId, 60 * 60 * 24);
+    await redisClient.set(key, result._id, 86400);
 
     return response.status(200).send({ token });
   }

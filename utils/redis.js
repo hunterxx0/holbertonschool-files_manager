@@ -9,7 +9,10 @@ class RedisClient {
       this.connect = false;
       console.log(err);
     });
-    this.asyn = promisify(this.client.get).bind(this.client);
+    this.getAsync = promisify(this.client.get).bind(this.client);
+    this.setAsync = promisify(this.client.set).bind(this.client);
+    this.expireAsync = promisify(this.client.expire).bind(this.client);
+    this.delAsync = promisify(this.client.del).bind(this.client);
   }
 
   isAlive() {
@@ -17,16 +20,17 @@ class RedisClient {
   }
 
   async get(key) {
-    return this.asyn(key);
+    const value = await this.getAsync(key);
+    return value;
   }
 
-  async set(key, value, lmt) {
-    this.client.set(key, value);
-    this.client.expire(key, lmt);
+  async set(key, value, duration) {
+    this.setAsync(key, value);
+    this.expireAsync(key, duration);
   }
 
   async del(key) {
-    this.client.del(key);
+    this.delAsync(key);
   }
 }
 
