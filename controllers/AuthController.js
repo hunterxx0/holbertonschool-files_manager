@@ -11,10 +11,13 @@ class AuthController {
     let buff = Buffer.from(logBase, 'base64');
     let text = buff.toString('ascii');
     const [email, password] = text.split(':');
-    const pass = sha1(password);
-    const result = await dbClient.db
-      .collection('users')
-      .findOne({ email, password: pass });
+    let result;
+    if (email && password) {
+      const pass = sha1(password);
+      result = await dbClient.db
+        .collection('users')
+        .findOne({ email, password: pass });
+    }
     if (!result) return response.status(401).send({ error: 'Unauthorized' });
     const token = v4();
     const key = `auth_${token}`;
