@@ -7,13 +7,18 @@ const dbClient = require('../utils/db');
 const redisClient = require('../utils/redis');
 
 class FilesController {
-  static async postUpload(request, response) {
+  static async retrieveUserId(request, response) {
     const { 'x-token': xToken } = request.headers;
     const id = await redisClient.get(`auth_${xToken}`);
     const result = await dbClient.db
       .collection('users')
       .findOne({ _id: ObjectId(id) });
     if (!result) return response.status(401).send({ error: 'Unauthorized' });
+    return id;
+  }
+
+  static async postUpload(request, response) {
+    const id = await FilesController.retrieveUserId(request, response);
     const { name, type, parentId = 0, isPublic = false, data } = request.body;
     const allowedTypes = ['folder', 'image', 'file'];
     if (!name) return response.status(400).send({ error: 'Missing name' });
@@ -69,12 +74,7 @@ class FilesController {
   }
 
   static async getShow(request, response) {
-    const { 'x-token': xToken } = request.headers;
-    const userId = await redisClient.get(`auth_${xToken}`);
-    const result = await dbClient.db
-      .collection('users')
-      .findOne({ _id: ObjectId(userId) });
-    if (!result) return response.status(401).send({ error: 'Unauthorized' });
+    const userId = await FilesController.retrieveUserId(request, response);
     const { id } = request.params;
     const file = await dbClient.db
       .collection('files')
