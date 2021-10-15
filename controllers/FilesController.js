@@ -1,6 +1,4 @@
 /* eslint-disable object-curly-newline */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-undef */
 /* eslint-disable comma-dangle */
 const { ObjectId } = require('mongodb');
 const { v4 } = require('uuid');
