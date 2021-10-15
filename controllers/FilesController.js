@@ -75,7 +75,7 @@ class FilesController {
 
   static async getShow(request, response) {
     const userId = await FilesController.retrieveUserId(request, response);
-    const { id } = request.params;
+    const { id = '' } = request.params;
     const file = await dbClient.db
       .collection('files')
       .findOne({ _id: ObjectId(id), userId });
