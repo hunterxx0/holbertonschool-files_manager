@@ -95,7 +95,7 @@ class FilesController {
     const { id } = request.params;
     const file = await dbClient.db
       .collection('files')
-      .findOne({ _id: ObjectId(id) });
+      .findOne({ _id: ObjectId(id), userId });
     if (!file) return response.status(404).send({ error: 'Not found' });
 
     const { _id, userId: uid, name, type, isPublic, parentId } = file;
