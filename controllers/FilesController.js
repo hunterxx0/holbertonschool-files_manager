@@ -93,9 +93,9 @@ class FilesController {
     const results = await dbClient.db
       .collection('files')
       .aggregate([
-        { $limit: 20 },
-        { $skip: page * 19 },
         { $match: { parentId } },
+        { $skip: page * 19 },
+        { $limit: 20 },
       ])
       .toArray();
     return response.status(201).send(results);
