@@ -124,7 +124,7 @@ class FilesController {
     if (!file.isPublic) {
       await dbClient.db
         .collection('files')
-        .update({ _id: ObjectId(id), userId }, { $set: { isPublic: true } });
+        .updateOne({ _id: ObjectId(id), userId }, { $set: { isPublic: true } });
     }
     const { name, type, parentId } = file;
     return response.status(200).send({
@@ -147,7 +147,10 @@ class FilesController {
     if (file.isPublic) {
       await dbClient.db
         .collection('files')
-        .update({ _id: ObjectId(id), userId }, { $set: { isPublic: false } });
+        .updateOne(
+          { _id: ObjectId(id), userId },
+          { $set: { isPublic: false } }
+        );
     }
     const { name, type, parentId } = file;
     return response.status(200).send({
