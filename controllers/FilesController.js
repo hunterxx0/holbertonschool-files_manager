@@ -177,7 +177,11 @@ class FilesController {
       .findOne({ _id: ObjectId(id) });
     if (!file) return response.status(404).send({ error: 'Not found' });
 
-    if (!file.isPublic && (userId !== file.userId || !result)) {
+    if (!file.isPublic && !result) {
+      return response.status(404).send({ error: 'Not found' });
+    }
+
+    if (!file.isPublic && userId !== file.userId) {
       return response.status(404).send({ error: 'Not found' });
     }
     if (file.type === 'folder') {
