@@ -37,12 +37,6 @@ class FilesController {
         return response.status(400).send({ error: 'Parent is not a folder' });
       }
     }
-    // await dbClient.db.collection('files').findOneAndUpdate(
-    //   { _id: ObjectId(parentId) },
-    //   {
-    //     userId: id,
-    //   }
-    // );
 
     if (type === 'folder') {
       const folder = await dbClient.db.collection('files').insertOne({
