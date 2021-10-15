@@ -152,7 +152,7 @@ class FilesController {
     const { name, type, parentId } = file;
     return response.status(200).send({
       id: file._id,
-      userId: FilesController.userId,
+      userId: file.userId,
       name,
       type,
       isPublic: false,
