@@ -170,12 +170,12 @@ class FilesController {
     const result = await dbClient.db
       .collection('users')
       .findOne({ _id: ObjectId(userId) });
-    if (!result) return response.status(404).send({ error: 'Not found' });
+
     const { id } = request.params;
     const file = await dbClient.db
       .collection('files')
-      .findOne({ _id: ObjectId(id), userId });
-    if (!file.isPublic && !file) {
+      .findOne({ _id: ObjectId(id) });
+    if (!file.isPublic && (userId !== file.userId || !result)) {
       return response.status(404).send({ error: 'Not found' });
     }
     if (file.type === 'folder') {
