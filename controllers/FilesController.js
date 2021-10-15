@@ -121,12 +121,11 @@ class FilesController {
       .collection('files')
       .findOne({ _id: ObjectId(id), userId });
     if (!file) return response.status(404).send({ error: 'Not found' });
-    await dbClient.db
-      .collection('files')
-      .findOneAndUpdate(
-        { _id: ObjectId(id), userId },
-        { $set: { isPublic: true } }
-      );
+    if (!file.isPublic) {
+      await dbClient.db
+        .collection('files')
+        .update({ _id: ObjectId(id), userId }, { $set: { isPublic: true } });
+    }
     const { name, type, parentId } = file;
     return response.status(200).send({
       id: file._id,
@@ -145,12 +144,11 @@ class FilesController {
       .collection('files')
       .findOne({ _id: ObjectId(id), userId });
     if (!file) return response.status(404).send({ error: 'Not found' });
-    await dbClient.db
-      .collection('files')
-      .findOneAndUpdate(
-        { _id: ObjectId(id), userId },
-        { $set: { isPublic: false } }
-      );
+    if (file.isPublic) {
+      await dbClient.db
+        .collection('files')
+        .update({ _id: ObjectId(id), userId }, { $set: { isPublic: false } });
+    }
     const { name, type, parentId } = file;
     return response.status(200).send({
       id: file._id,
