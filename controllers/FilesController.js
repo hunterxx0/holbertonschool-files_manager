@@ -87,9 +87,18 @@ class FilesController {
       .send({ id: _id, userId: uid, name, type, isPublic, parentId });
   }
 
-  // static async getIndex(request, response) {
-  //   const { parentId } = request.query;
-  //   console.log(parentId);
-  // }
+  static async getIndex(request, response) {
+    const { parentId = 0, page = 0 } = request.query;
+    await FilesController.retrieveUserId(request, response);
+    const results = await dbClient.db
+      .collection('files')
+      .aggregate([
+        { $limit: 20 },
+        { $skip: page * 20 },
+        { $match: { parentId } },
+      ])
+      .toArray();
+    return response.status(201).send(results);
+  }
 }
 module.exports = FilesController;
