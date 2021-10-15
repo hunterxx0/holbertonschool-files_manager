@@ -36,22 +36,14 @@ class FilesController {
       }
     }
 
+    const bodyObj = { userId: id, name, type, isPublic, parentId };
+
     if (type === 'folder') {
-      const folder = await dbClient.db.collection('files').insertOne({
-        userId: id,
-        name,
-        type,
-        isPublic,
-        parentId,
-      });
+      const folder = await dbClient.db.collection('files').insertOne(bodyObj);
 
       return response.status(201).send({
         id: folder.insertedId,
-        userId: id,
-        name,
-        type,
-        isPublic,
-        parentId,
+        ...bodyObj,
       });
     }
     const filePath = process.env.FOLDER_PATH || '/tmp/files_manager';
@@ -66,12 +58,13 @@ class FilesController {
       if (err) throw err;
     });
 
-    const bodyObj = { userId: id, name, type, isPublic, parentId, localPath };
-
-    const newFile = await dbClient.db.collection('files').insertOne(bodyObj);
+    const newFile = await dbClient.db
+      .collection('files')
+      .insertOne({ ...bodyObj, localPath });
     return response.status(201).send({
       id: newFile.insertedId,
       ...bodyObj,
+      localPath,
     });
   }
 
