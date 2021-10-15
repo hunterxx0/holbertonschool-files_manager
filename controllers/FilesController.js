@@ -98,7 +98,15 @@ class FilesController {
         { $limit: 20 },
       ])
       .toArray();
-    return response.status(201).send(results);
+    const cleanResults = results.map((file) => ({
+      id: file._id,
+      userId: file.userId,
+      name: file.name,
+      type: file.type,
+      isPublic: file.isPublic,
+      parentId: file.parentId,
+    }));
+    return response.status(201).send(cleanResults);
   }
 }
 module.exports = FilesController;
