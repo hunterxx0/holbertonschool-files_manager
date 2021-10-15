@@ -66,22 +66,12 @@ class FilesController {
       if (err) throw err;
     });
 
-    const newFile = await dbClient.db.collection('files').insertOne({
-      userId: id,
-      name,
-      type,
-      isPublic,
-      parentId,
-      localPath,
-    });
+    const bodyObj = { userId: id, name, type, isPublic, parentId, localPath };
+
+    const newFile = await dbClient.db.collection('files').insertOne(bodyObj);
     return response.status(201).send({
       id: newFile.insertedId,
-      userId: id,
-      name,
-      type,
-      isPublic,
-      parentId,
-      localPath,
+      ...bodyObj,
     });
   }
 
