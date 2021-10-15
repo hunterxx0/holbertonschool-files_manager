@@ -82,9 +82,14 @@ class FilesController {
     if (!file) return response.status(404).send({ error: 'Not found' });
 
     const { _id, userId: uid, name, type, isPublic, parentId } = file;
-    return response
-      .status(201)
-      .send({ id: _id, userId: uid, name, type, isPublic, parentId });
+    return response.send({
+      id: _id,
+      userId: uid,
+      name,
+      type,
+      isPublic,
+      parentId,
+    });
   }
 
   static async getIndex(request, response) {
