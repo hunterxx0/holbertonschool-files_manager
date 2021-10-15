@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable object-curly-newline */
 /* eslint-disable comma-dangle */
 const { ObjectId } = require('mongodb');
@@ -177,11 +178,10 @@ class FilesController {
       .findOne({ _id: ObjectId(id) });
     if (!file) return response.status(404).send({ error: 'Not found' });
 
-    if (!file.isPublic && !result) {
-      return response.status(404).send({ error: 'Not found' });
-    }
-
-    if (!file.isPublic && userId.toString() !== file.userId.toString()) {
+    if (
+      !file.isPublic &&
+      (userId.toString() !== file.userId.toString() || !result)
+    ) {
       return response.status(404).send({ error: 'Not found' });
     }
     if (file.type === 'folder') {
