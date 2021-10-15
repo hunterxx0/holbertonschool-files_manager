@@ -98,9 +98,10 @@ class FilesController {
       .findOne({ _id: ObjectId(id), userId });
     if (!file) return response.status(404).send({ error: 'Not found' });
 
-    return response.status(201).send({
-      ...file,
-    });
+    const { _id, userId: uid, name, type, isPublic, parentId } = file;
+    return response
+      .status(201)
+      .send({ id: _id, userId: uid, name, type, isPublic, parentId });
   }
 
   // static async getIndex(request, response) {
