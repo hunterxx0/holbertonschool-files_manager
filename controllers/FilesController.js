@@ -113,5 +113,53 @@ class FilesController {
     }));
     return response.status(201).send(cleanResults);
   }
+
+  static async putPublish(request, response) {
+    const userId = await FilesController.retrieveUserId(request, response);
+    const { id } = request.params;
+    const file = await dbClient.db
+      .collection('files')
+      .findOne({ _id: ObjectId(id), userId });
+    if (!file) return response.status(404).send({ error: 'Not found' });
+    await dbClient.db
+      .collection('files')
+      .findOneAndUpdate(
+        { _id: ObjectId(id), userId },
+        { $set: { isPublic: true } }
+      );
+    const { name, type, parentId } = file;
+    return response.status(200).send({
+      id: file._id,
+      userId: file.userId,
+      name,
+      type,
+      isPublic: true,
+      parentId,
+    });
+  }
+
+  static async putUnpublish(request, response) {
+    const userId = await FilesController.retrieveUserId(request, response);
+    const { id } = request.params;
+    const file = await dbClient.db
+      .collection('files')
+      .findOne({ _id: ObjectId(id), userId });
+    if (!file) return response.status(404).send({ error: 'Not found' });
+    await dbClient.db
+      .collection('files')
+      .findOneAndUpdate(
+        { _id: ObjectId(id), userId },
+        { $set: { isPublic: false } }
+      );
+    const { name, type, parentId } = file;
+    return response.status(200).send({
+      id: file._id,
+      userId: FilesController.userId,
+      name,
+      type,
+      isPublic: false,
+      parentId,
+    });
+  }
 }
 module.exports = FilesController;
