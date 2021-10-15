@@ -94,7 +94,7 @@ class FilesController {
       .collection('files')
       .aggregate([
         { $match: { parentId } },
-        { $skip: page * 19 },
+        { $skip: page * 20 },
         { $limit: 20 },
       ])
       .toArray();
