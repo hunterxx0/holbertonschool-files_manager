@@ -181,7 +181,7 @@ class FilesController {
       return response.status(404).send({ error: 'Not found' });
     }
 
-    if (!file.isPublic && userId !== file.userId) {
+    if (!file.isPublic && userId.toString() !== file.userId.toString()) {
       return response.status(404).send({ error: 'Not found' });
     }
     if (file.type === 'folder') {
