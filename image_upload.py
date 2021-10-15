@@ -3,6 +3,7 @@ import requests
 import sys
 
 file_path = sys.argv[1]
+print(file_path)
 file_name = file_path.split('/')[-1]
 
 file_encoded = None

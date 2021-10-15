@@ -16,8 +16,7 @@ class FilesController {
       .collection('users')
       .findOne({ _id: ObjectId(id) });
     if (!result) return response.status(401).send({ error: 'Unauthorized' });
-    const { name, type, isPublic = false, data } = request.body;
-    let { parentId = null } = request.body;
+    const { name, type, parentId = 0, isPublic = false, data } = request.body;
     const allowedTypes = ['folder', 'image', 'file'];
     if (!name) return response.status(400).send({ error: 'Missing name' });
     if (!type || !allowedTypes.includes(type)) {
@@ -27,7 +26,7 @@ class FilesController {
       return response.status(400).send({ error: 'Missing data' });
     }
 
-    if (parentId !== null) {
+    if (parentId) {
       const parentFile = await dbClient.db
         .collection('files')
         .findOne({ _id: ObjectId(parentId) });
@@ -45,9 +44,8 @@ class FilesController {
     //   }
     // );
 
-    parentId = 0;
     if (type === 'folder') {
-      const newFile = await dbClient.db.collection('files').insertOne({
+      const folder = await dbClient.db.collection('files').insertOne({
         userId: id,
         name,
         type,
@@ -56,7 +54,7 @@ class FilesController {
       });
 
       return response.status(201).send({
-        id: newFile.insertedId,
+        id: folder.insertedId,
         userId: id,
         name,
         type,
@@ -113,6 +111,9 @@ class FilesController {
     });
   }
 
-  //   static async getIndex(request, response) {}
+  // static async getIndex(request, response) {
+  //   const { parentId } = request.query;
+  //   console.log(parentId);
+  // }
 }
 module.exports = FilesController;
