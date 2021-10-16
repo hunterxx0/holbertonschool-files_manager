@@ -16,7 +16,7 @@ class FilesController {
       .collection('users')
       .findOne({ _id: ObjectId(id) });
     if (!result) return response.status(401).send({ error: 'Unauthorized' });
-    return id;
+    return result._id;
   }
 
   static async postUpload(request, response) {
@@ -86,7 +86,10 @@ class FilesController {
   }
 
   static async getShow(request, response) {
-    const userId = await FilesController.retrieveUserId(request, response);
+    const userId = await FilesController.retrieveUserId(
+      request,
+      response
+    ).catch((err) => console.error(err));
     const { id = '' } = request.params;
     const file = await dbClient.db
       .collection('files')
@@ -94,7 +97,7 @@ class FilesController {
     if (!file) return response.status(404).send({ error: 'Not found' });
 
     const { _id, userId: uid, name, type, isPublic, parentId } = file;
-    return response.send({
+    return response.status(200).send({
       id: _id,
       userId: uid,
       name,
