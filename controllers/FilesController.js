@@ -108,7 +108,7 @@ class FilesController {
   }
 
   static async getIndex(request, response) {
-    const { parentId = 0, page = 0 } = request.query;
+    const { parentId, page = 0 } = request.query;
     await FilesController.retrieveUserId(request, response);
     const results = await dbClient.db
       .collection('files')
