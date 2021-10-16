@@ -194,7 +194,7 @@ class FilesController {
     }
     const type = mime.contentType(file.name);
     const res = fs.readFileSync(file.localPath);
-    return response.setHeader('Content-Type', type).send(res);
+    return response.status(200).setHeader('Content-Type', type).send(res);
   }
 }
 module.exports = FilesController;
