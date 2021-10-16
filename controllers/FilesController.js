@@ -201,7 +201,7 @@ class FilesController {
         .status(400)
         .send({ error: "A folder doesn't have content" });
     }
-    const path = size !== '' ? `${file.localPath}_size` : file.localPath;
+    const path = size !== '' ? `${file.localPath}_${size}` : file.localPath;
     if (!fs.existsSync(path)) {
       return response.status(404).send({ error: 'Not found' });
     }
