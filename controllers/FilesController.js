@@ -110,13 +110,12 @@ class FilesController {
   static async getIndex(request, response) {
     const { parentId = 0, page = 0 } = request.query;
     await FilesController.retrieveUserId(request, response);
+    const pipeline = [{ $skip: page * 20 }, { $limit: 20 }];
+    if (parentId !== 0) pipeline.push({ $match: { parentId } });
+
     const results = await dbClient.db
       .collection('files')
-      .aggregate([
-        { $match: { parentId } },
-        { $skip: page * 20 },
-        { $limit: 20 },
-      ])
+      .aggregate([{ $skip: page * 20 }, { $limit: 20 }])
       .toArray();
     const cleanResults = results.map((file) => ({
       id: file._id,
@@ -126,7 +125,7 @@ class FilesController {
       isPublic: file.isPublic,
       parentId: file.parentId,
     }));
-    return response.status(201).send(cleanResults);
+    return response.status(200).send(cleanResults);
   }
 
   static async putPublish(request, response) {
