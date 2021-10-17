@@ -115,7 +115,7 @@ class FilesController {
 
     const results = await dbClient.db
       .collection('files')
-      .aggregate([{ $skip: page * 20 }, { $limit: 20 }])
+      .aggregate(pipeline)
       .toArray();
     const cleanResults = results.map((file) => ({
       id: file._id,
